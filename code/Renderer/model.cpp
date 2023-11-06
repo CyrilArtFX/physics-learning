@@ -6,7 +6,7 @@
 #include "../Fileio.h"
 #include <string.h>
 #include <algorithm>
-#include "../../Shape.h"
+#include "../Physics/Shape.h"
 
 #pragma warning( disable : 4996 )
 

@@ -19,12 +19,15 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Body.cpp" />
+    <ClCompile Include="code\Physics\Body.cpp" />
     <ClCompile Include="code\application.cpp" />
     <ClCompile Include="code\Fileio.cpp" />
     <ClCompile Include="code\main.cpp" />
     <ClCompile Include="code\Math\Bounds.cpp" />
     <ClCompile Include="code\Math\LCP.cpp" />
+    <ClCompile Include="code\Physics\Contact.cpp" />
+    <ClCompile Include="code\Physics\Intersections.cpp" />
+    <ClCompile Include="code\Physics\Shape.cpp" />
     <ClCompile Include="code\Renderer\Buffer.cpp" />
     <ClCompile Include="code\Renderer\Descriptor.cpp" />
     <ClCompile Include="code\Renderer\DeviceContext.cpp" />
@@ -40,7 +43,7 @@
     <ClCompile Include="code\Scene.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Body.h" />
+    <ClInclude Include="code\Physics\Body.h" />
     <ClInclude Include="code\application.h" />
     <ClInclude Include="code\Fileio.h" />
     <ClInclude Include="code\Math\Bounds.h" />
@@ -48,6 +51,8 @@
     <ClInclude Include="code\Math\Matrix.h" />
     <ClInclude Include="code\Math\Quat.h" />
     <ClInclude Include="code\Math\Vector.h" />
+    <ClInclude Include="code\Physics\Contact.h" />
+    <ClInclude Include="code\Physics\Intersections.h" />
     <ClInclude Include="code\Renderer\Buffer.h" />
     <ClInclude Include="code\Renderer\Descriptor.h" />
     <ClInclude Include="code\Renderer\DeviceContext.h" />
@@ -61,7 +66,7 @@
     <ClInclude Include="code\Renderer\shader.h" />
     <ClInclude Include="code\Renderer\SwapChain.h" />
     <ClInclude Include="code\Scene.h" />
-    <ClInclude Include="Shape.h" />
+    <ClInclude Include="code\Physics\Shape.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

@@ -69,9 +69,12 @@
     <ClCompile Include="code\Math\LCP.cpp">
       <Filter>code\Math</Filter>
     </ClCompile>
-    <ClCompile Include="Body.cpp">
+    <ClCompile Include="code\Physics\Body.cpp">
       <Filter>code\Physics</Filter>
     </ClCompile>
+    <ClCompile Include="code\Physics\Intersections.cpp" />
+    <ClCompile Include="code\Physics\Contact.cpp" />
+    <ClCompile Include="code\Physics\Shape.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="code\application.h">
@@ -134,11 +137,13 @@
     <ClInclude Include="code\Math\LCP.h">
       <Filter>code\Math</Filter>
     </ClInclude>
-    <ClInclude Include="Body.h">
+    <ClInclude Include="code\Physics\Body.h">
       <Filter>code\Physics</Filter>
     </ClInclude>
-    <ClInclude Include="Shape.h">
+    <ClInclude Include="code\Physics\Shape.h">
       <Filter>code\Physics</Filter>
     </ClInclude>
+    <ClInclude Include="code\Physics\Intersections.h" />
+    <ClInclude Include="code\Physics\Contact.h" />
   </ItemGroup>
 </Project>
