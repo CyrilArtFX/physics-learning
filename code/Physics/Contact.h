@@ -17,4 +17,6 @@ public:
 	Body* b{ nullptr };
 
 	static void ResolveContact(Contact& contact);
+
+	static int CompareContact(const void* p1, const void* p2);
 };

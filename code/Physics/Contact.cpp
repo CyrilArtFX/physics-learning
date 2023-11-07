@@ -65,9 +65,28 @@ void Contact::ResolveContact(Contact& contact)
 
 
 	// If object are interpenetrating, use this to set them on contact
-	const float ta = inv_mass_a / (inv_mass_a + inv_mass_b);
-	const float tb = inv_mass_b / (inv_mass_a + inv_mass_b);
-	const Vec3 d = contact.ptOnBWorldSpace - contact.ptOnAWorldSpace;
-	a->position += d * ta;
-	b->position -= d * tb;
+	if (contact.timeOfImpact == 0.0f)
+	{
+		const float ta = inv_mass_a / (inv_mass_a + inv_mass_b);
+		const float tb = inv_mass_b / (inv_mass_a + inv_mass_b);
+		const Vec3 d = contact.ptOnBWorldSpace - contact.ptOnAWorldSpace;
+		a->position += d * ta;
+		b->position -= d * tb;
+	}
+}
+
+int Contact::CompareContact(const void* p1, const void* p2)
+{
+	const Contact& a = *(Contact*)p1;
+	const Contact& b = *(Contact*)p1;
+
+	if (a.timeOfImpact < b.timeOfImpact) 
+	{
+		return -1;
+	}
+	else if (a.timeOfImpact == b.timeOfImpact) 
+	{
+		return -0;
+	}
+	return 1;
 }

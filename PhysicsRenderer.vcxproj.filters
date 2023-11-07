@@ -75,6 +75,7 @@
     <ClCompile Include="code\Physics\Intersections.cpp" />
     <ClCompile Include="code\Physics\Contact.cpp" />
     <ClCompile Include="code\Physics\Shape.cpp" />
+    <ClCompile Include="code\Physics\Broadphase.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="code\application.h">
@@ -145,5 +146,6 @@
     </ClInclude>
     <ClInclude Include="code\Physics\Intersections.h" />
     <ClInclude Include="code\Physics\Contact.h" />
+    <ClInclude Include="code\Physics\Broadphase.h" />
   </ItemGroup>
 </Project>
