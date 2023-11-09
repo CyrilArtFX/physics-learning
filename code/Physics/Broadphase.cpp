@@ -1,6 +1,8 @@
 #include "Broadphase.h"
 #include "../Math/Bounds.h"
 #include "Shape.h"
+#include <vector>
+#include <algorithm>
 
 
 int CompareSAP(const void* a, const void* b) 
@@ -8,12 +10,17 @@ int CompareSAP(const void* a, const void* b)
 	const PseudoBody* ea = (const PseudoBody*)a;
 	const PseudoBody* eb = (const PseudoBody*)b;
 
-	if (ea->value < eb->value) return -1;
+	if (ea->value > eb->value) return -1;
 	return 1;
 }
 
+bool SortPseudoBodies(const PseudoBody& a, const PseudoBody& b)
+{
+	return a.value < b.value;
+}
 
-void SortBodiesBounds(const Body* bodies, const size_t num, PseudoBody* sortedArray, const float dt_sec)
+
+void SortBodiesBounds(const Body* bodies, const size_t num, std::vector<PseudoBody>& sortedArray, const float dt_sec)
 {
 	Vec3 axis = Vec3(1, 1, 1);
 	axis.Normalize();
@@ -31,20 +38,24 @@ void SortBodiesBounds(const Body* bodies, const size_t num, PseudoBody* sortedAr
 		bounds.Expand(bounds.mins + Vec3(-1, -1, -1) * epsilon);
 		bounds.Expand(bounds.maxs + Vec3(1, 1, 1) * epsilon);
 
-		sortedArray[i * 2 + 0].id = i;
+		sortedArray.push_back(PseudoBody{ i, axis.Dot(bounds.mins), true });
+		sortedArray.push_back(PseudoBody{ i, axis.Dot(bounds.maxs), false });
+
+		/*sortedArray[i * 2 + 0].id = i;
 		sortedArray[i * 2 + 0].value = axis.Dot(bounds.mins);
 		sortedArray[i * 2 + 0].ismin = true;
 
 		sortedArray[i * 2 + 1].id = i;
 		sortedArray[i * 2 + 1].value = axis.Dot(bounds.maxs);
-		sortedArray[i * 2 + 1].ismin = false;
+		sortedArray[i * 2 + 1].ismin = false;*/
 	}
 
-	qsort(sortedArray, num * 2, sizeof(PseudoBody), CompareSAP);
+	std::sort(sortedArray.begin(), sortedArray.end(), SortPseudoBodies);
+	//qsort(sortedArray, num * 2, sizeof(PseudoBody), CompareSAP);
 }
 
 
-void BuildPairs(std::vector<CollisionPair>& collisionPairs, const PseudoBody* sortedBodies, const int num)
+void BuildPairs(std::vector<CollisionPair>& collisionPairs, const std::vector<PseudoBody>& sortedBodies, const int num)
 {
 	collisionPairs.clear();
 
@@ -74,16 +85,17 @@ void BuildPairs(std::vector<CollisionPair>& collisionPairs, const PseudoBody* so
 
 void SweepAndPrune1D(const Body* bodies, const size_t num, std::vector<CollisionPair>& finalPairs, const float dt_sec)
 {
-	PseudoBody* sortedBodies = (PseudoBody*)alloca(sizeof(PseudoBody) * num * 2);
+	//PseudoBody* sortedBodies = (PseudoBody*)_malloca(sizeof(PseudoBody) * num * 2);
+	std::vector<PseudoBody> sortedBodies;
+	sortedBodies.reserve(num * 2);
 
 	SortBodiesBounds(bodies, num, sortedBodies, dt_sec);
 	BuildPairs(finalPairs, sortedBodies, num);
 }
 
-
-void BroadPhase(const Body* bodies, const int num, std::vector< CollisionPair >& finalPairs, const float dt_sec)
+void BroadPhase(const Body* bodies, const int num, std::vector<CollisionPair>& finalPairs, const float dt_sec)
 {
-	finalPairs.clear();
+	finalPairs.clear(); 
 
-	SweepAndPrune1D(bodies, num, finalPairs, dt_sec);
+	SweepAndPrune1D(bodies, num, finalPairs, dt_sec); 
 }

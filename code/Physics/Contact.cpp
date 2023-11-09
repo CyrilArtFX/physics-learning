@@ -90,3 +90,8 @@ int Contact::CompareContact(const void* p1, const void* p2)
 	}
 	return 1;
 }
+
+bool Contact::SortContacts(const Contact& a, const Contact& b)
+{
+	return a.timeOfImpact > b.timeOfImpact;
+}

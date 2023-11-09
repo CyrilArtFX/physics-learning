@@ -19,4 +19,5 @@ public:
 	static void ResolveContact(Contact& contact);
 
 	static int CompareContact(const void* p1, const void* p2);
+	static bool SortContacts(const Contact& a, const Contact& b);
 };
