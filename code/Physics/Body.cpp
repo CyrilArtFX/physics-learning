@@ -45,7 +45,7 @@ Mat3 Body::GetInverseInertiaTensorWorldSpace() const
 
 
 
-void Body::Update(const float dt_sec)
+void Body::PhysicUpdate(const float dt_sec)
 {
 	position += linearVelocity * dt_sec;
 
@@ -66,6 +66,11 @@ void Body::Update(const float dt_sec)
 
 	// Get the new model position
 	position = position_cm + dq.RotatePoint(cm_to_position); 
+}
+
+void Body::Update(const float dt_sec)
+{
+	PhysicUpdate(dt_sec);
 }
 
 

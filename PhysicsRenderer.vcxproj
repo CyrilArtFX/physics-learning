@@ -19,6 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="code\Petanque\Boule.cpp" />
+    <ClCompile Include="code\Petanque\Cochonnet.cpp" />
     <ClCompile Include="code\Physics\Body.cpp" />
     <ClCompile Include="code\application.cpp" />
     <ClCompile Include="code\Fileio.cpp" />
@@ -44,6 +46,8 @@
     <ClCompile Include="code\Scene.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="code\Petanque\Boule.h" />
+    <ClInclude Include="code\Petanque\Cochonnet.h" />
     <ClInclude Include="code\Physics\Body.h" />
     <ClInclude Include="code\application.h" />
     <ClInclude Include="code\Fileio.h" />

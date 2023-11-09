@@ -443,6 +443,16 @@ void Application::Keyboard( int key, int scancode, int action, int modifiers ) {
 		//  relou
 		Cleanup();
 	}
+
+	if (GLFW_KEY_KP_0 == key && GLFW_RELEASE == action)
+	{
+		scene->LaunchCochonnet();
+	}
+
+	if (GLFW_KEY_KP_1 == key && GLFW_RELEASE == action)
+	{
+		scene->LaunchBoule();
+	}
 }
 
 /*

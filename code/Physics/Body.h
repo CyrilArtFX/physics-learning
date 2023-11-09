@@ -25,7 +25,8 @@ public:
 	Mat3 GetInverseInertiaTensorWorldSpace() const;
 
 
-	void Update(const float dt_sec);
+	void PhysicUpdate(const float dt_sec);
+	virtual void Update(const float dt_sec);
 
 
 	void ApplyImpulseLinear(const Vec3& impulse);

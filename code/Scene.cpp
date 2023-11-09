@@ -50,25 +50,6 @@ Scene::Initialize
 */
 void Scene::Initialize()
 {
-	for (int i = 0; i < 6; ++i)
-	{
-		for (int j = 0; j < 6; ++j)
-		{
-			Body body;
-			float radius = 0.5f;
-			float x = (i - 3) * radius * 1.5f; 
-			float y = (j - 3) * radius * 1.5f; 
-			body.position = Vec3(x, y, 10); 
-			body.orientation = Quat(0, 0, 0, 1); 
-			body.shape = new ShapeSphere(radius); 
-			body.inverseMass = 1.0f; 
-			body.elasticity = 0.5f;  
-			body.friction = 0.5f; 
-			body.linearVelocity.Zero();
-			bodies.push_back(body); 
-		}
-	}
-
 	float incrementalAngle = 0;
 	float radiusArena = 5;
 	float gap = 5;
@@ -195,4 +176,20 @@ void Scene::Update( const float dt_sec )
 			bodies[i].Update(timeRemaining);
 		}
 	}
+}
+
+void Scene::LaunchCochonnet()
+{
+	if (cochonnetLaunched) return;
+
+	cochonnet = new Cochonnet();
+	bodies.push_back(*cochonnet);
+	cochonnetLaunched = true;
+}
+
+void Scene::LaunchBoule()
+{
+	Boule* boule = new Boule();
+	boules.push_back(boule);
+	bodies.push_back(*boule);
 }

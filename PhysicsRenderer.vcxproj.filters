@@ -76,6 +76,8 @@
     <ClCompile Include="code\Physics\Contact.cpp" />
     <ClCompile Include="code\Physics\Shape.cpp" />
     <ClCompile Include="code\Physics\Broadphase.cpp" />
+    <ClCompile Include="code\Petanque\Cochonnet.cpp" />
+    <ClCompile Include="code\Petanque\Boule.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="code\application.h">
@@ -147,5 +149,7 @@
     <ClInclude Include="code\Physics\Intersections.h" />
     <ClInclude Include="code\Physics\Contact.h" />
     <ClInclude Include="code\Physics\Broadphase.h" />
+    <ClInclude Include="code\Petanque\Cochonnet.h" />
+    <ClInclude Include="code\Petanque\Boule.h" />
   </ItemGroup>
 </Project>
