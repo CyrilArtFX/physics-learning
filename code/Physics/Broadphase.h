@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <memory>
 #include "Body.h"
 
 struct CollisionPair
@@ -25,4 +26,4 @@ struct PseudoBody
 	bool ismin;
 };
 
-void BroadPhase(const Body* bodies, const int num, std::vector<CollisionPair>& finalPairs, const float dt_sec);
+void BroadPhase(const std::vector<std::shared_ptr<Body>> bodies, const int num, std::vector<CollisionPair>& finalPairs, const float dt_sec);

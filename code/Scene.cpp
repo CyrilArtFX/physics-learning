@@ -24,7 +24,7 @@ Scene::~Scene
 */
 Scene::~Scene() {
 	for ( int i = 0; i < bodies.size(); i++ ) {
-		delete bodies[ i ].shape;
+		delete bodies[ i ]->shape;
 	}
 	bodies.clear();
 }
@@ -36,7 +36,7 @@ Scene::Reset
 */
 void Scene::Reset() {
 	for ( int i = 0; i < bodies.size(); i++ ) {
-		delete bodies[ i ].shape;
+		delete bodies[ i ]->shape;
 	}
 	bodies.clear();
 
@@ -57,14 +57,14 @@ void Scene::Initialize()
 
 	for (int i = 0; i < n_balls; i++)
 	{
-		Body barrier;
-		barrier.position = Vec3(cos(incrementalAngle) * radiusArena * gap, sin(incrementalAngle) * radiusArena * gap, 0);
-		barrier.orientation = Quat(0, 0, 0, 1);
-		barrier.shape = new ShapeSphere(radiusArena);
-		barrier.inverseMass = 0.00f;
-		barrier.elasticity = 0.5f;
-		barrier.friction = 0.05f;
-		barrier.linearVelocity = Vec3(0, 0, 0);
+		std::shared_ptr<Body> barrier = std::make_shared<Body>();
+		barrier->position = Vec3(cos(incrementalAngle) * radiusArena * gap, sin(incrementalAngle) * radiusArena * gap, 0);
+		barrier->orientation = Quat(0, 0, 0, 1);
+		barrier->shape = new ShapeSphere(radiusArena);
+		barrier->inverseMass = 0.00f;
+		barrier->elasticity = 0.5f;
+		barrier->friction = 0.05f;
+		barrier->linearVelocity = Vec3(0, 0, 0);
 		incrementalAngle += 2 * 3.14159265 / n_balls;
 		bodies.push_back(barrier);
 	}
@@ -74,16 +74,16 @@ void Scene::Initialize()
 	{
 		for (int j = 0; j < 6; ++j)
 		{
-			Body earth;
+			std::shared_ptr<Body> earth = std::make_shared<Body>();
 			float radius = 50.0f; 
 			float x = (i - 3) * radius * 0.2f; 
 			float y = (j - 3) * radius * 0.2f; 
-			earth.position = Vec3(x, y, -radius); 
-			earth.orientation = Quat(0, 0, 0, 1);
-			earth.shape = new ShapeSphere(radius);
-			earth.inverseMass = 0.0f;
-			earth.elasticity = 0.99f;
-			earth.friction = 0.5f;
+			earth->position = Vec3(x, y, -radius);
+			earth->orientation = Quat(0, 0, 0, 1);
+			earth->shape = new ShapeSphere(radius);
+			earth->inverseMass = 0.0f;
+			earth->elasticity = 0.99f;
+			earth->friction = 0.5f;
 			bodies.push_back(earth);
 		}
 	}
@@ -99,16 +99,16 @@ void Scene::Update( const float dt_sec )
 	//  gravity
 	for (auto& body : bodies)
 	{
-		if (body.inverseMass == 0.0f) continue;
-		float mass = 1.0f / body.inverseMass;
+		if (body->inverseMass == 0.0f) continue;
+		float mass = 1.0f / body->inverseMass;
 		
 		Vec3 impulse_gravity = Vec3{ 0.0f, 0.0f, -1.0f } * 50.0f * mass * dt_sec;
-		body.ApplyImpulseLinear(impulse_gravity);
+		body->ApplyImpulseLinear(impulse_gravity);
 	}
 
 	//  broadphase
 	std::vector<CollisionPair> collisionPairs;
-	BroadPhase(bodies.data(), bodies.size(), collisionPairs, dt_sec);
+	BroadPhase(bodies, bodies.size(), collisionPairs, dt_sec);
 
 	//  collision checks (narrow phase)
 	int num_contacts = 0; 
@@ -120,10 +120,10 @@ void Scene::Update( const float dt_sec )
 	for (int i = 0; i < collisionPairs.size(); i++)
 	{
 		const CollisionPair& pair = collisionPairs[i];
-		Body& bodyA = bodies[pair.a]; 
-		Body& bodyB = bodies[pair.b]; 
+		std::shared_ptr<Body> bodyA = bodies[pair.a]; 
+		std::shared_ptr<Body> bodyB = bodies[pair.b];
 
-		if (bodyA.inverseMass == 0.0f && bodyB.inverseMass == 0.0f) continue;
+		if (bodyA->inverseMass == 0.0f && bodyB->inverseMass == 0.0f) continue;
 
 		Contact contact;
 		if (Intersections::Intersect(bodyA, bodyB, dt_sec, contact)) 
@@ -148,8 +148,8 @@ void Scene::Update( const float dt_sec )
 	{
 		Contact& contact = contacts[i];
 		const float dt = contact.timeOfImpact - accumulated_time;
-		Body* body_a = contact.a;
-		Body* body_b = contact.b;
+		std::shared_ptr<Body> body_a = contact.a;
+		std::shared_ptr<Body> body_b = contact.b;
 
 		// Skip body par with infinite mass
 		if (body_a->inverseMass == 0.0f && body_b->inverseMass == 0.0f) continue;
@@ -157,7 +157,7 @@ void Scene::Update( const float dt_sec )
 		// Position update
 		for (int j = 0; j < bodies.size(); ++j) 
 		{
-			bodies[j].Update(dt);
+			bodies[j]->Update(dt);
 		}
 
 		Contact::ResolveContact(contact);
@@ -173,7 +173,7 @@ void Scene::Update( const float dt_sec )
 	{
 		for (int i = 0; i < bodies.size(); ++i) 
 		{
-			bodies[i].Update(timeRemaining);
+			bodies[i]->Update(timeRemaining);
 		}
 	}
 }
@@ -182,14 +182,14 @@ void Scene::LaunchCochonnet()
 {
 	if (cochonnetLaunched) return;
 
-	cochonnet = new Cochonnet();
-	bodies.push_back(*cochonnet);
+	cochonnet = std::make_shared<Cochonnet>();
+	bodies.push_back(cochonnet);
 	cochonnetLaunched = true;
 }
 
 void Scene::LaunchBoule()
 {
-	Boule* boule = new Boule();
+	std::shared_ptr<Boule> boule = std::make_shared<Boule>();
 	boules.push_back(boule);
-	bodies.push_back(*boule);
+	bodies.push_back(boule);
 }

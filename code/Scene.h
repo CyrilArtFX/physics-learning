@@ -3,6 +3,8 @@
 //
 #pragma once
 #include <vector>
+#include <memory>
+
 
 #include "Physics/Body.h"
 #include "Petanque/Boule.h"
@@ -25,10 +27,10 @@ public:
 	void LaunchCochonnet();
 	void LaunchBoule();
 
-	std::vector<Body&> bodies;
+	std::vector<std::shared_ptr<Body>> bodies;
 
 	bool cochonnetLaunched{ false };
-	Cochonnet* cochonnet;
-	std::vector<Boule*> boules;
+	std::shared_ptr<Cochonnet> cochonnet;
+	std::vector<std::shared_ptr<Boule>> boules;
 };
 

@@ -79,7 +79,7 @@ void Application::Initialize() {
 	m_models.reserve( scene->bodies.size() );
 	for ( int i = 0; i < scene->bodies.size(); i++ ) {
 		Model * model = new Model();
-		model->BuildFromShape( scene->bodies[ i ].shape );
+		model->BuildFromShape( scene->bodies[ i ]->shape );
 		model->MakeVBO( &deviceContext );
 
 		m_models.push_back( model );
@@ -633,13 +633,13 @@ void Application::UpdateUniforms() {
 		//	Update the uniform buffer with the body positions/orientations
 		//
 		for ( int i = 0; i < scene->bodies.size(); i++ ) {
-			Body & body = scene->bodies[ i ];
+			std::shared_ptr<Body> body = scene->bodies[ i ];
 
-			Vec3 fwd = body.orientation.RotatePoint( Vec3( 1, 0, 0 ) );
-			Vec3 up = body.orientation.RotatePoint( Vec3( 0, 0, 1 ) );
+			Vec3 fwd = body->orientation.RotatePoint( Vec3( 1, 0, 0 ) );
+			Vec3 up = body->orientation.RotatePoint( Vec3( 0, 0, 1 ) );
 
 			Mat4 matOrient;
-			matOrient.Orient( body.position, fwd, up );
+			matOrient.Orient( body->position, fwd, up );
 			matOrient = matOrient.Transpose();
 
 			// Update the uniform buffer with the orientation of this body
@@ -649,8 +649,8 @@ void Application::UpdateUniforms() {
 			renderModel.model = m_models[ i ];
 			renderModel.uboByteOffset = uboByteOffset;
 			renderModel.uboByteSize = sizeof( matOrient );
-			renderModel.pos = body.position;
-			renderModel.orient = body.orientation;
+			renderModel.pos = body->position;
+			renderModel.orient = body->orientation;
 			m_renderModels.push_back( renderModel );
 
 			uboByteOffset += deviceContext.GetAligendUniformByteOffset( sizeof( matOrient ) );

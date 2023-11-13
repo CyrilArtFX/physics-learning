@@ -20,19 +20,19 @@ bool SortPseudoBodies(const PseudoBody& a, const PseudoBody& b)
 }
 
 
-void SortBodiesBounds(const Body* bodies, const size_t num, std::vector<PseudoBody>& sortedArray, const float dt_sec)
+void SortBodiesBounds(const std::vector<std::shared_ptr<Body>> bodies, const size_t num, std::vector<PseudoBody>& sortedArray, const float dt_sec)
 {
 	Vec3 axis = Vec3(1, 1, 1);
 	axis.Normalize();
 
 	for (int i = 0; i < num; i++)
 	{
-		const Body& body = bodies[i];
-		Bounds bounds = body.shape->GetBounds(body.position, body.orientation);
+		const std::shared_ptr<Body> body = bodies[i];
+		Bounds bounds = body->shape->GetBounds(body->position, body->orientation);
 
 		// Expand the bounds by the linear velocity
-		bounds.Expand(bounds.mins + body.linearVelocity * dt_sec);
-		bounds.Expand(bounds.maxs + body.linearVelocity * dt_sec);
+		bounds.Expand(bounds.mins + body->linearVelocity * dt_sec);
+		bounds.Expand(bounds.maxs + body->linearVelocity * dt_sec);
 
 		const float epsilon = 0.01f;
 		bounds.Expand(bounds.mins + Vec3(-1, -1, -1) * epsilon);
@@ -83,7 +83,7 @@ void BuildPairs(std::vector<CollisionPair>& collisionPairs, const std::vector<Ps
 }
 
 
-void SweepAndPrune1D(const Body* bodies, const size_t num, std::vector<CollisionPair>& finalPairs, const float dt_sec)
+void SweepAndPrune1D(const std::vector<std::shared_ptr<Body>> bodies, const size_t num, std::vector<CollisionPair>& finalPairs, const float dt_sec)
 {
 	//PseudoBody* sortedBodies = (PseudoBody*)_malloca(sizeof(PseudoBody) * num * 2);
 	std::vector<PseudoBody> sortedBodies;
@@ -93,7 +93,7 @@ void SweepAndPrune1D(const Body* bodies, const size_t num, std::vector<Collision
 	BuildPairs(finalPairs, sortedBodies, num);
 }
 
-void BroadPhase(const Body* bodies, const int num, std::vector<CollisionPair>& finalPairs, const float dt_sec)
+void BroadPhase(const std::vector<std::shared_ptr<Body>> bodies, const int num, std::vector<CollisionPair>& finalPairs, const float dt_sec)
 {
 	finalPairs.clear(); 
 

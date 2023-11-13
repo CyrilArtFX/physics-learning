@@ -1,41 +1,41 @@
 #include "Intersections.h"
 
-bool Intersections::Intersect(Body& a, Body& b, const float dt, Contact& contact)
+bool Intersections::Intersect(std::shared_ptr<Body> a, std::shared_ptr<Body> b, const float dt, Contact& contact)
 {
-	contact.a = &a;
-	contact.b = &b; 
-	const Vec3 ab = b.position - a.position; 
+	contact.a = a;
+	contact.b = b; 
+	const Vec3 ab = b->position - a->position;
 	contact.normal = ab; 
 	contact.normal.Normalize();
 
-	if (a.shape->GetType() == Shape::ShapeType::SHAPE_SPHERE && b.shape->GetType() == Shape::ShapeType::SHAPE_SPHERE) 
+	if (a->shape->GetType() == Shape::ShapeType::SHAPE_SPHERE && b->shape->GetType() == Shape::ShapeType::SHAPE_SPHERE)
 	{
-		ShapeSphere* sphere_a = static_cast<ShapeSphere*>(a.shape); 
-		ShapeSphere* sphere_b = static_cast<ShapeSphere*>(b.shape);
+		ShapeSphere* sphere_a = static_cast<ShapeSphere*>(a->shape);
+		ShapeSphere* sphere_b = static_cast<ShapeSphere*>(b->shape);
 
-		Vec3 pos_a = a.position; 
-		Vec3 pos_b = b.position; 
-		Vec3 vel_a = a.linearVelocity; 
-		Vec3 vel_b = b.linearVelocity;
+		Vec3 pos_a = a->position;
+		Vec3 pos_b = b->position;
+		Vec3 vel_a = a->linearVelocity;
+		Vec3 vel_b = b->linearVelocity;
 
 		if (Intersections::SphereSphereDynamic(*sphere_a, *sphere_b, pos_a, pos_b, vel_a, vel_b, dt,
 			contact.ptOnAWorldSpace, contact.ptOnBWorldSpace, contact.timeOfImpact))
 		{
 			// Step bodies forward to get local space collision points
-			a.Update(contact.timeOfImpact); 
-			b.Update(contact.timeOfImpact);
+			a->Update(contact.timeOfImpact);
+			b->Update(contact.timeOfImpact);
 
 			// Convert world space contacts to local space
-			contact.ptOnALocalSpace = a.WorldSpaceToBodySpace(contact.ptOnAWorldSpace);
-			contact.ptOnBLocalSpace = b.WorldSpaceToBodySpace(contact.ptOnBWorldSpace);
+			contact.ptOnALocalSpace = a->WorldSpaceToBodySpace(contact.ptOnAWorldSpace);
+			contact.ptOnBLocalSpace = b->WorldSpaceToBodySpace(contact.ptOnBWorldSpace);
 
-			Vec3 ab = a.position - b.position; 
+			Vec3 ab = a->position - b->position;
 			contact.normal = ab; 
 			contact.normal.Normalize(); 
 
 			// Unwind time step
-			a.Update(-contact.timeOfImpact); 
-			b.Update(-contact.timeOfImpact);
+			a->Update(-contact.timeOfImpact);
+			b->Update(-contact.timeOfImpact);
 
 			// Calculate separation distance
 			float r = ab.GetMagnitude() - (sphere_a->radius + sphere_b->radius);

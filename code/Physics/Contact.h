@@ -1,4 +1,5 @@
 #pragma once
+#include <memory>
 #include "../Math/Vector.h"
 #include "Body.h"
 
@@ -13,8 +14,8 @@ public:
 	float separationDistance;
 	float timeOfImpact;
 
-	Body* a{ nullptr };
-	Body* b{ nullptr };
+	std::shared_ptr<Body> a;
+	std::shared_ptr<Body> b;
 
 	static void ResolveContact(Contact& contact);
 
