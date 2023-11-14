@@ -26,7 +26,7 @@ Application
 */
 class Application {
 public:
-	Application() : m_isPaused( true ), m_stepFrame( false ) {}
+	Application() : m_isPaused( false ), m_stepFrame( false ) {}
 	~Application();
 
 	void Initialize();
@@ -83,6 +83,7 @@ private:
 	float m_cameraRadius;
 	bool m_isPaused;
 	bool m_stepFrame;
+	bool should_quit{ false };
 
 	std::vector< RenderModel > m_renderModels;
 

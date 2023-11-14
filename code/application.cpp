@@ -3,6 +3,7 @@
 //
 #include <chrono>
 #include <thread>
+#include <iostream>
 
 #include "Renderer/DeviceContext.h"
 #include "Renderer/model.h"
@@ -79,7 +80,7 @@ void Application::Initialize() {
 	m_models.reserve( scene->bodies.size() );
 	for ( int i = 0; i < scene->bodies.size(); i++ ) {
 		Model * model = new Model();
-		model->BuildFromShape( scene->bodies[ i ].shape );
+		model->BuildFromShape( scene->bodies[ i ]->shape );
 		model->MakeVBO( &deviceContext );
 
 		m_models.push_back( model );
@@ -91,7 +92,7 @@ void Application::Initialize() {
 	m_cameraRadius = 15.0f;
 	m_cameraFocusPoint = Vec3( 0, 0, 3 );
 
-	m_isPaused = true;
+	m_isPaused = false;
 	m_stepFrame = false;
 }
 
@@ -440,8 +441,7 @@ void Application::Keyboard( int key, int scancode, int action, int modifiers ) {
 
 	if (GLFW_KEY_ESCAPE == key)
 	{
-		//  relou
-		Cleanup();
+		should_quit = true;
 	}
 
 	if (GLFW_KEY_KP_0 == key && GLFW_RELEASE == action)
@@ -480,6 +480,41 @@ void Application::MainLoop() {
 
 		// Get User Input
 		glfwPollEvents();
+		if (should_quit) return;
+
+
+		// Updates model list if it has changed in scene
+		if (scene->bodiesUpdated)
+		{
+			m_models.clear();
+
+			m_models.reserve(scene->bodies.size()); 
+			for (int i = 0; i < scene->bodies.size(); i++) 
+			{
+				Model* model = new Model(); 
+				model->BuildFromShape(scene->bodies[i]->shape); 
+				model->MakeVBO(&deviceContext); 
+
+				m_models.push_back(model); 
+			}
+
+			scene->bodiesUpdated = false;
+		}
+
+		// Updates scene camera infos
+		Vec3 camPos = Vec3(10, 0, 5) * 1.25f;
+		camPos.x = cosf(m_cameraPositionPhi) * sinf(m_cameraPositionTheta);
+		camPos.y = sinf(m_cameraPositionPhi) * sinf(m_cameraPositionTheta);
+		camPos.z = cosf(m_cameraPositionTheta);
+		camPos *= m_cameraRadius;
+		camPos += m_cameraFocusPoint;
+
+		Vec3 camDir = m_cameraFocusPoint - camPos;
+		camDir.Normalize();
+
+		scene->camPos = camPos; 
+		scene->camDir = camDir; 
+
 
 		// If the time is greater than 33ms (30fps)
 		// then force the time difference to smaller
@@ -502,7 +537,6 @@ void Application::MainLoop() {
 		}
 		float dt_sec = dt_us * 0.001f * 0.001f;
 
-		// Run Update
 		if ( runPhysics ) {
 			int startTime = GetTimeMicroseconds();
 			for ( int i = 0; i < 2; i++ ) {
@@ -633,13 +667,13 @@ void Application::UpdateUniforms() {
 		//	Update the uniform buffer with the body positions/orientations
 		//
 		for ( int i = 0; i < scene->bodies.size(); i++ ) {
-			Body & body = scene->bodies[ i ];
+			std::shared_ptr<Body> body = scene->bodies[ i ];
 
-			Vec3 fwd = body.orientation.RotatePoint( Vec3( 1, 0, 0 ) );
-			Vec3 up = body.orientation.RotatePoint( Vec3( 0, 0, 1 ) );
+			Vec3 fwd = body->orientation.RotatePoint( Vec3( 1, 0, 0 ) );
+			Vec3 up = body->orientation.RotatePoint( Vec3( 0, 0, 1 ) );
 
 			Mat4 matOrient;
-			matOrient.Orient( body.position, fwd, up );
+			matOrient.Orient( body->position, fwd, up );
 			matOrient = matOrient.Transpose();
 
 			// Update the uniform buffer with the orientation of this body
@@ -649,8 +683,8 @@ void Application::UpdateUniforms() {
 			renderModel.model = m_models[ i ];
 			renderModel.uboByteOffset = uboByteOffset;
 			renderModel.uboByteSize = sizeof( matOrient );
-			renderModel.pos = body.position;
-			renderModel.orient = body.orientation;
+			renderModel.pos = body->position;
+			renderModel.orient = body->orientation;
 			m_renderModels.push_back( renderModel );
 
 			uboByteOffset += deviceContext.GetAligendUniformByteOffset( sizeof( matOrient ) );

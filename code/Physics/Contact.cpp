@@ -2,8 +2,8 @@
 
 void Contact::ResolveContact(Contact& contact)
 {
-	Body* a = contact.a;
-	Body* b = contact.b;
+	std::shared_ptr<Body> a = contact.a;
+	std::shared_ptr<Body> b = contact.b;
 
 	const float inv_mass_a = a->inverseMass;
 	const float inv_mass_b = b->inverseMass;
