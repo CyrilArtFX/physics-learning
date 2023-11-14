@@ -3,7 +3,7 @@
 
 Cochonnet::Cochonnet()
 {
-	position = Vec3(0, 0, 0);
+	position = Vec3(0, 0, 10);
 	orientation = Quat(0, 0, 0, 1);
 	shape = new ShapeSphere(0.5);
 	inverseMass = 1.0f;
@@ -15,7 +15,7 @@ void Cochonnet::Update(float dt_sec)
 {
 	PhysicUpdate(dt_sec);
 
-	if (linearVelocity.GetLengthSqr() < 0.1f)
+	if (linearVelocity.GetLengthSqr() < 2.0f)
 	{
 		linearVelocity.Zero();
 		angularVelocity.Zero();

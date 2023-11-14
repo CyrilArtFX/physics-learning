@@ -7,6 +7,7 @@
 #include "Physics/Broadphase.h"
 #include <vector>
 #include <algorithm>
+#include <iostream>
 
 
 /*
@@ -183,13 +184,33 @@ void Scene::LaunchCochonnet()
 	if (cochonnetLaunched) return;
 
 	cochonnet = std::make_shared<Cochonnet>();
+	Vec3 pos = camPos;
+	pos.Normalize();
+	pos *= 30.0f;
+	pos.z = fmax(pos.z, 5.0f); 
+	cochonnet->position = pos;
+	cochonnet->linearVelocity = camDir * 30.0f;
+	
 	bodies.push_back(cochonnet);
 	cochonnetLaunched = true;
+
+	bodiesUpdated = true;
 }
 
 void Scene::LaunchBoule()
 {
+	if(!cochonnetLaunched) return;
+
 	std::shared_ptr<Boule> boule = std::make_shared<Boule>();
+	Vec3 pos = camPos;
+	pos.Normalize();
+	pos *= 30.0f;
+	pos.z = fmax(pos.z, 5.0f);
+	boule->position = pos;
+	boule->linearVelocity = camDir * 20.0f;
+
 	boules.push_back(boule);
 	bodies.push_back(boule);
+
+	bodiesUpdated = true;
 }

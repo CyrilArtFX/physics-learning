@@ -32,5 +32,10 @@ public:
 	bool cochonnetLaunched{ false };
 	std::shared_ptr<Cochonnet> cochonnet;
 	std::vector<std::shared_ptr<Boule>> boules;
+
+	bool bodiesUpdated{ false };
+
+	Vec3 camPos{ Vec3{0,0,0} };
+	Vec3 camDir{ Vec3{1,0,0} };
 };
 
