@@ -37,5 +37,9 @@ public:
 
 	Vec3 camPos{ Vec3{0,0,0} };
 	Vec3 camDir{ Vec3{1,0,0} };
+
+
+	bool petanqueAllLaunched{ false };
+	bool petanqueResolved{ false };
 };
 

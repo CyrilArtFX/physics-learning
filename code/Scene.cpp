@@ -177,6 +177,31 @@ void Scene::Update( const float dt_sec )
 			bodies[i]->Update(timeRemaining);
 		}
 	}
+
+
+	// Petanque logic
+	if (!petanqueAllLaunched || petanqueResolved) return;
+
+	for (std::shared_ptr<Boule> boule : boules)
+		if (boule->linearVelocity != Vec3{ 0.0f, 0.0f, 0.0f }) return;
+
+	if (cochonnet->linearVelocity != Vec3{ 0.0f, 0.0f, 0.0f }) return;
+
+	float smallest_distance = 100000000.0f;
+	int smallest_index = 0;
+	for (int i = 0; i < 6; i++)
+	{
+		Vec3 boule_cochonnet = cochonnet->position - boules[i]->position;
+		float dist = boule_cochonnet.GetLengthSqr();
+		if (dist <= smallest_distance)
+		{
+			smallest_distance = dist;
+			smallest_index = i + 1;
+		}
+	}
+
+	std::cout << "\nPetanque result : Boule number " << smallest_index << " is the nearest of the cochonnet !\n";
+	petanqueResolved = true;
 }
 
 void Scene::LaunchCochonnet()
@@ -194,12 +219,14 @@ void Scene::LaunchCochonnet()
 	bodies.push_back(cochonnet);
 	cochonnetLaunched = true;
 
+	std::cout << "Launched cochonnet.\n";
 	bodiesUpdated = true;
 }
 
 void Scene::LaunchBoule()
 {
 	if(!cochonnetLaunched) return;
+	if (boules.size() >= 6) return;
 
 	std::shared_ptr<Boule> boule = std::make_shared<Boule>();
 	Vec3 pos = camPos;
@@ -212,5 +239,8 @@ void Scene::LaunchBoule()
 	boules.push_back(boule);
 	bodies.push_back(boule);
 
+	std::cout << "Launched boule number " << boules.size() << ".\n";
 	bodiesUpdated = true;
+
+	if (boules.size() >= 6) petanqueAllLaunched = true;
 }
