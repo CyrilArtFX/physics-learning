@@ -1,5 +1,0 @@
-La branche main en est au stade où je l'avais laissé jeudi soir, le jeu se lançait sur le pc de l'école mais crashait si je faisais spawn une boule de pétanque
-
-La branche before-petanque en est au stade où la physique marchait mais où aucune fonction liée à la pétanque n'a été implémentée, ça se lance normalement sur le pc de l'école mais pas chez moi à cause d'une erreur avec Vulkan
-
-La branche tests en est à un stade où j'ai "normalement" fix les problèmes de ce que j'avais fait au début de la pétanque, mais ça se lance pas chez moi à cause de la même erreur de Vulkan qu'au dessus, à tester sur le pc de l'école
