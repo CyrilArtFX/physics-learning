@@ -51,6 +51,8 @@ Scene::Initialize
 */
 void Scene::Initialize()
 {
+	//  petanque arena
+	/*
 	float incrementalAngle = 0;
 	float radiusArena = 5;
 	float gap = 5;
@@ -88,6 +90,7 @@ void Scene::Initialize()
 			bodies.push_back(earth);
 		}
 	}
+	*/
 }
 
 /*
@@ -180,6 +183,7 @@ void Scene::Update( const float dt_sec )
 
 
 	// Petanque logic
+	/*
 	if (!petanqueAllLaunched || petanqueResolved) return;
 
 	for (std::shared_ptr<Boule> boule : boules)
@@ -202,8 +206,10 @@ void Scene::Update( const float dt_sec )
 
 	std::cout << "\nPetanque result : Boule number " << smallest_index << " is the nearest of the cochonnet !\n";
 	petanqueResolved = true;
+	*/
 }
 
+/*
 void Scene::LaunchCochonnet()
 {
 	if (cochonnetLaunched) return;
@@ -244,3 +250,4 @@ void Scene::LaunchBoule()
 
 	if (boules.size() >= 6) petanqueAllLaunched = true;
 }
+*/

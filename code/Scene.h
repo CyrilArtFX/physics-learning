@@ -24,14 +24,14 @@ public:
 	void Initialize();
 	void Update( const float dt_sec );
 
-	void LaunchCochonnet();
-	void LaunchBoule();
+	//void LaunchCochonnet();
+	//void LaunchBoule();
 
 	std::vector<std::shared_ptr<Body>> bodies;
 
-	bool cochonnetLaunched{ false };
-	std::shared_ptr<Cochonnet> cochonnet;
-	std::vector<std::shared_ptr<Boule>> boules;
+	//bool cochonnetLaunched{ false };
+	//std::shared_ptr<Cochonnet> cochonnet;
+	//std::vector<std::shared_ptr<Boule>> boules;
 
 	bool bodiesUpdated{ false };
 
@@ -39,7 +39,7 @@ public:
 	Vec3 camDir{ Vec3{1,0,0} };
 
 
-	bool petanqueAllLaunched{ false };
-	bool petanqueResolved{ false };
+	//bool petanqueAllLaunched{ false };
+	//bool petanqueResolved{ false };
 };
 

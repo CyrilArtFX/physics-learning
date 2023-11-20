@@ -95,7 +95,7 @@ void Application::Initialize() {
 	m_isPaused = false;
 	m_stepFrame = false;
 
-	std::cout << "\n\n\nPetanque game :\n\n";
+	//std::cout << "\n\n\nPetanque game :\n\n";
 }
 
 /*
@@ -446,6 +446,7 @@ void Application::Keyboard( int key, int scancode, int action, int modifiers ) {
 		should_quit = true;
 	}
 
+	/*
 	if (GLFW_KEY_KP_0 == key && GLFW_RELEASE == action)
 	{
 		scene->LaunchCochonnet();
@@ -454,7 +455,7 @@ void Application::Keyboard( int key, int scancode, int action, int modifiers ) {
 	if (GLFW_KEY_KP_1 == key && GLFW_RELEASE == action)
 	{
 		scene->LaunchBoule();
-	}
+	}*/
 }
 
 /*
